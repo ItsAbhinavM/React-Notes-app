@@ -1,18 +1,3 @@
-'''from django.shortcuts import render
-from rest_framework import generics
-from .models import *
-from .serializers import NoteSerializers
-# Create your views here.
-
-class NoteListCreateView(generics.ListCreateAPIView):
-    queryset=Note.objects.all()
-    serializer_class=NoteSerializers
-
-class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset=Note.objects.all()
-    serializer_class=NoteSerializers
-'''
-
 #import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -71,36 +56,34 @@ class NoteListView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-class DeleteNoteView(APIView):
-
-    def delete(self, request, note_id):
-        try:
-            note = Note.objects.get(id=note_id)
-            note.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Note.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    
-        
-'''
-            else:   
+        else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    elif request.method == 'DELETE':
-        # Assuming the note_id is passed in the request data or URL parameters
-        note_id = request.data.get('note_id')
-        if note_id:
-            try:
-                note = Note.objects.get(id=note_id)
-                note.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            except Note.DoesNotExist:
-                return Response({"error": "Note not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response({"error": "Missing note_id"}, status=status.HTTP_400_BAD_REQUEST)
         
-        except Note.DoesNotExist:
-        return Response({"error": "Note not found"}, status=status.HTTP_404_NOT_FOUND)
-        '''
-    
+@api_view(['PUT'])
+def saveNote(request,pk):
+    note=Note.objects.get(id=pk)
+    serializer = NoteSerializers(note,data=request.data,partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+'''
+@api_view(['DELETE'])
+def deleteNote(request, pk):
+    try:
+        note = Note.objects.get(id=pk)
+        note.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except Note.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)'''
+@api_view(['DELETE'])
+def deleteNote(request, pk):
+    try:
+        note = Note.objects.get(id=pk)
+        note.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except Note.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+

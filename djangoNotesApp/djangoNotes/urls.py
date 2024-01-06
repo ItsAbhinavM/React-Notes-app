@@ -1,9 +1,11 @@
 from django.urls import path
 from .views import*
+from . import views
 
 urlpatterns = [
     path('djangonotes/', NoteListView.as_view()),
-    path('delete/<int:pk>/',DeleteNoteView.as_view())
+    path('djangonotes/<int:pk>/', views.saveNote,name="saving note"),
+    path('delete/<int:pk>/',views.deleteNote,name="delete note")
 ]
 
 '''urlpatterns = [
